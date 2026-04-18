@@ -1,5 +1,8 @@
 package cache;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A generic LRU (Least Recently Used) cache implementation.
  * Uses a combination of HashMap and doubly-linked list for O(1) get and put operations.
@@ -8,6 +11,47 @@ package cache;
  * @param <V> the type of values
  */
 public class LRUCache<K, V> {
+    
+    private final int capacity;
+    private int size;
+    private final Map<K, Node<K, V>> map;
+    private final DoublyLinkedList<K, V> list;
+    
+    /**
+     * Create a new LRU cache with the specified capacity.
+     * 
+     * @param capacity the maximum number of items the cache can hold
+     * @throws IllegalArgumentException if capacity is not positive
+     */
+    public LRUCache(int capacity) {
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Capacity must be positive");
+        }
+        this.capacity = capacity;
+        this.size = 0;
+        this.map = new HashMap<>();
+        this.list = new DoublyLinkedList<>();
+    }
+    
+    /**
+     * Get the value associated with the key.
+     * If the key exists, it becomes the most recently used.
+     * 
+     * @param key the key to look up
+     * @return the value if found, null otherwise
+     */
+    public V get(K key) {
+        if (!map.containsKey(key)) {
+            return null;
+        }
+        
+        Node<K, V> node = map.get(key);
+        // Move to front (most recently used)
+        list.remove(node);
+        list.addFirst(node);
+        
+        return node.value;
+    }
     
     /**
      * Node for the doubly-linked list.
