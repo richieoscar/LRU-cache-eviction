@@ -54,6 +54,39 @@ public class LRUCache<K, V> {
     }
     
     /**
+     * Put a key-value pair into the cache.
+     * If the key already exists, update the value and move to front.
+     * If the cache is at capacity, evict the least recently used item.
+     * 
+     * @param key the key
+     * @param value the value
+     */
+    public void put(K key, V value) {
+        if (map.containsKey(key)) {
+            // Update existing key
+            Node<K, V> node = map.get(key);
+            node.value = value;
+            list.remove(node);
+            list.addFirst(node);
+        } else {
+            // Add new key
+            if (size >= capacity) {
+                // Evict least recently used (last node)
+                Node<K, V> lru = list.removeLast();
+                if (lru != null) {
+                    map.remove(lru.key);
+                    size--;
+                }
+            }
+            
+            Node<K, V> newNode = new Node<>(key, value);
+            list.addFirst(newNode);
+            map.put(key, newNode);
+            size++;
+        }
+    }
+    
+    /**
      * Node for the doubly-linked list.
      */
     private static class Node<K, V> {
