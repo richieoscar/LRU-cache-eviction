@@ -104,6 +104,33 @@ public class LRUCache<K, V> {
     }
     
     /**
+     * Get the current size of the cache.
+     * 
+     * @return the number of items in the cache
+     */
+    public int size() {
+        return size;
+    }
+    
+    /**
+     * Get the capacity of the cache.
+     * 
+     * @return the maximum capacity
+     */
+    public int getCapacity() {
+        return capacity;
+    }
+    
+    /**
+     * Clear all entries from the cache.
+     */
+    public void clear() {
+        map.clear();
+        list.clear();
+        size = 0;
+    }
+    
+    /**
      * Node for the doubly-linked list.
      */
     private static class Node<K, V> {
