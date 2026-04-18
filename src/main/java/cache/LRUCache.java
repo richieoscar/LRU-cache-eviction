@@ -87,6 +87,23 @@ public class LRUCache<K, V> {
     }
     
     /**
+     * Remove a key from the cache.
+     * 
+     * @param key the key to remove
+     * @return true if the key was present, false otherwise
+     */
+    public boolean remove(K key) {
+        if (!map.containsKey(key)) {
+            return false;
+        }
+        
+        Node<K, V> node = map.remove(key);
+        list.remove(node);
+        size--;
+        return true;
+    }
+    
+    /**
      * Node for the doubly-linked list.
      */
     private static class Node<K, V> {
